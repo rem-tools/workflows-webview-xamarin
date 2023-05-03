@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Xamarin.Forms.Platform.iOS;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Foundation;
 
 [assembly: ExportRenderer(typeof(CustomWebView), typeof(CustomWebViewRenderer))]
 namespace WorkflowsWebview.iOS.Renderers
@@ -22,7 +23,7 @@ namespace WorkflowsWebview.iOS.Renderers
 
                 if (webView != null)
                 {
-                    // Personaliza la configuración del WebView aquí
+                    // Personaliza la configuraciï¿½n del WebView aquï¿½
                     webView.Configuration.Preferences.JavaScriptEnabled = true;
                     webView.AllowsBackForwardNavigationGestures = false;
                     webView.Configuration.AllowsInlineMediaPlayback = true;
@@ -42,16 +43,39 @@ namespace WorkflowsWebview.iOS.Renderers
         {
             if (message.Name == "workflowsWebview")
             {
-                var messageBody = JsonConvert.DeserializeObject<Dictionary<string, string>>(message.Body.ToString());
 
-                if (messageBody["entity"] == "step")
+                if (!(message.Body is NSDictionary messageBody))
                 {
-                    var step = messageBody["value"];
-                    Debug.WriteLine($"Step: {messageBody["entity"]} - {step}");
-                } else
+                    Debug.WriteLine("Wrong message");
+                    return;
+                }
+
+                NSObject entityObject, valueObject;
+                if (!messageBody.TryGetValue(new NSString("entity"), out entityObject) ||
+                    !messageBody.TryGetValue(new NSString("value"), out valueObject))
                 {
-                    var workflow = messageBody["value"];
-                    Debug.WriteLine($"Workflow: {messageBody["entity"]} - {workflow}");
+                    Debug.WriteLine("Wrong message");
+                    return;
+                }
+
+                string entity = entityObject.ToString();
+                string value = valueObject.ToString();
+
+                if (entity == "step")
+                {
+                    Debug.WriteLine($"Step: {entity} - {value}");
+
+                    // Aqui se puede usar el contenido del Step
+                }
+                else if (entity == "workflow")
+                {
+                    Debug.WriteLine($"Workflow: {entity} - {value}");
+
+                    // Aqui se puede usar el contenido del Workflow
+                }
+                else
+                {
+                    Debug.WriteLine("Wrong message");
                 }
             }
         }
