@@ -18,7 +18,7 @@ namespace WorkflowsWebview
             {
                 Source = new UrlWebViewSource
                 {
-                    // Aqui va el URL de nuestro Workflows
+                    // Aqui va el URL de nuestro Workflow
                     Url = "URL_WORKFLOW"
                 },
                 HorizontalOptions = LayoutOptions.FillAndExpand,

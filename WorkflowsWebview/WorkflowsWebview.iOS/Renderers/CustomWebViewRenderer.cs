@@ -23,7 +23,7 @@ namespace WorkflowsWebview.iOS.Renderers
 
                 if (webView != null)
                 {
-                    // Personaliza la configuraci�n del WebView aqu�
+                    // Personaliza la configuraci�n del WebView aqui
                     webView.Configuration.Preferences.JavaScriptEnabled = true;
                     webView.AllowsBackForwardNavigationGestures = false;
                     webView.Configuration.AllowsInlineMediaPlayback = true;
