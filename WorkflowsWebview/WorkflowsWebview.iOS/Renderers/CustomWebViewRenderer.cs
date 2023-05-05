@@ -7,6 +7,8 @@ using Xamarin.Forms.Platform.iOS;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Foundation;
+using System;
+using UIKit;
 
 [assembly: ExportRenderer(typeof(CustomWebView), typeof(CustomWebViewRenderer))]
 namespace WorkflowsWebview.iOS.Renderers
@@ -23,12 +25,13 @@ namespace WorkflowsWebview.iOS.Renderers
 
                 if (webView != null)
                 {
-                    // Personaliza la configuraci�n del WebView aqui
                     webView.Configuration.Preferences.JavaScriptEnabled = true;
+
                     webView.AllowsBackForwardNavigationGestures = false;
+
                     webView.Configuration.AllowsInlineMediaPlayback = true;
-                    webView.Configuration.MediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypes.None;
                     webView.Configuration.MediaPlaybackRequiresUserAction = false;
+                    webView.Configuration.MediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypes.None;
 
                     webView.Configuration.UserContentController.AddScriptMessageHandler(new WorkflowsWebViewScriptMessageHandler(), CustomWebView.JavascriptInterfaceName);
 

@@ -1,4 +1,4 @@
-using Android.App;
+using Android.Views;
 using Android.Content;
 using Android.Webkit;
 using Java.Interop;
@@ -13,6 +13,7 @@ using AndroidX.Core.App;
 using AndroidX.Core.Content;
 using Newtonsoft.Json;
 using Org.Json;
+using Android.OS;
 
 [assembly: ExportRenderer(typeof(CustomWebView), typeof(CustomWebViewRenderer))]
 namespace WorkflowsWebview.Droid.Renderers
@@ -76,6 +77,24 @@ namespace WorkflowsWebview.Droid.Renderers
                 Control.Settings.AllowUniversalAccessFromFileURLs = true;
                 Control.Settings.LoadsImagesAutomatically = true;
 
+                // Update: Agregamos la aceleracion de hardware para el webview
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                {
+                    Control.Settings.MixedContentMode = MixedContentHandling.AlwaysAllow;
+                    Control.SetLayerType(LayerType.Hardware, null);
+                }
+                else if (Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
+                {
+                    Control.SetLayerType(LayerType.Hardware, null);
+                } else
+                {
+                    Control.SetLayerType(LayerType.Software, null);
+                }
+
+                // Opcional: ajustar la prioridad de renderizado para que su contenido se muestre primero
+                Control.SetRendererPriorityPolicy(RendererPriority.Important, false);
+                
+                Control.Settings.SetSupportZoom(false);
                 Control.Settings.SetGeolocationEnabled(true);
 
                 if (Control != null && e.NewElement is CustomWebView customWebView)
