@@ -157,13 +157,13 @@ namespace WorkflowsWebview.Droid.Renderers
 
     public class CustomWebViewRenderProcessClient : WebViewRenderProcessClient
     {
-        public override void OnRenderProcessResponsive(global::Android.Webkit.WebView view, WebViewRenderProcess renderer)
+        public override void OnRenderProcessResponsive(Android.Webkit.WebView view, WebViewRenderProcess renderer)
         {
             renderer.Terminate();
             view.Reload();
         }
 
-        public override void OnRenderProcessUnresponsive(global::Android.Webkit.WebView view, WebViewRenderProcess renderer)
+        public override void OnRenderProcessUnresponsive(Android.Webkit.WebView view, WebViewRenderProcess renderer)
         {
             renderer.Terminate();
             view.Reload();
@@ -172,7 +172,7 @@ namespace WorkflowsWebview.Droid.Renderers
 
     public class CustomWebViewClient : WebViewClient
     {
-        public override bool OnRenderProcessGone(global::Android.Webkit.WebView view, RenderProcessGoneDetail detail)
+        public override bool OnRenderProcessGone(Android.Webkit.WebView view, RenderProcessGoneDetail detail)
         {
             if (detail != null)
             {
@@ -184,6 +184,23 @@ namespace WorkflowsWebview.Droid.Renderers
                 return false;
             }
             return base.OnRenderProcessGone(view, detail);
+        }
+
+        // OnPageFinished se llama cuando la página termina de cargarse
+        public override void OnPageFinished(Android.Webkit.WebView view, string url)
+        {
+            base.OnPageFinished(view, url);
+
+            // Workaround to Chromium Error injecting an element with movement into our Workflow Webview
+            // https://bugs.chromium.org/p/chromium/issues/detail?id=1401352#c12
+            string jsCode = "var spinner = document.createElement('div');" +
+                "spinner.setAttribute('class', 'spinner');" +
+                "document.body.insertBefore(spinner, document.body.firstChild);" +
+                "var style = document.createElement('style');" +
+                "style.innerHTML = '.spinner { position: absolute; top: 0; left: 0; z-index: 9999; border: 1px solid rgba(0,0,0,0.1); border-top-color: rgba(255,255,255,0.1); border-radius: 50%; width: 1px; height: 1px; animation: spin 1s linear infinite; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';" +
+                "document.head.appendChild(style);";
+
+            view.EvaluateJavascript(jsCode, null);
         }
     }
 }

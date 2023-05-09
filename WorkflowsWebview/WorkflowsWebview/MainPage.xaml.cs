@@ -11,21 +11,27 @@ namespace WorkflowsWebview
 {
     public partial class MainPage : ContentPage
     {
+        public const string Url = "WORKFLOW_URL";
         
         public MainPage()
         {
-            var customWebview = new CustomWebView
+            InitializeComponent();
+        }
+
+        private void OpenWebViewActivityButton_Clicked(object sender, EventArgs e)
+        {
+
+            var webView = new CustomWebView();
+
+            // logs Url
+            System.Diagnostics.Debug.WriteLine(Url);
+
+            webView.Source = new UrlWebViewSource
             {
-                Source = new UrlWebViewSource
-                {
-                    // Aqui va el URL de nuestro Workflow
-                    Url = "URL_WORKFLOW"
-                },
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand
+                Url = Url,
             };
-            
-            Content = customWebview;
+
+            Content = webView;
         }
     }
 }
