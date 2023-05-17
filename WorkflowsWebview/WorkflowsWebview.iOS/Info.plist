@@ -25,7 +25,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>WorkflowsWebview</string>
 	<key>CFBundleIdentifier</key>
-	<string>tools.rem.WorkflowsWebview</string>
+	<string>tools.rem.test.workflowswebviewxamarin</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>

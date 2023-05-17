@@ -4,38 +4,46 @@ using WebKit;
 using Xamarin.Forms;
 using System.Diagnostics;
 using Xamarin.Forms.Platform.iOS;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using Foundation;
-using System;
-using UIKit;
 
 [assembly: ExportRenderer(typeof(CustomWebView), typeof(CustomWebViewRenderer))]
 namespace WorkflowsWebview.iOS.Renderers
 {
-    public class CustomWebViewRenderer : WkWebViewRenderer
+    public class CustomWebViewRenderer : ViewRenderer<CustomWebView, WKWebView>
     {
-        protected override void OnElementChanged(VisualElementChangedEventArgs e)
+        WKWebView _wkWebView;
+
+        protected override void OnElementChanged(ElementChangedEventArgs<CustomWebView> e)
         {
             base.OnElementChanged(e);
 
-            if (NativeView != null)
+            if (_wkWebView == null)
             {
-                var webView = NativeView as WKWebView;
+                var userController = new WKUserContentController();
+                userController.AddScriptMessageHandler(new WorkflowsWebViewScriptMessageHandler(), CustomWebView.JavascriptInterfaceName);
 
-                if (webView != null)
+                var config = new WKWebViewConfiguration
                 {
-                    webView.Configuration.Preferences.JavaScriptEnabled = true;
+                    AllowsInlineMediaPlayback = true,
+                    MediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypes.None,
+                    MediaPlaybackRequiresUserAction = false,
+                    RequiresUserActionForMediaPlayback = false,
+                    UserContentController = userController
+                };
 
-                    webView.AllowsBackForwardNavigationGestures = false;
+                _wkWebView = new WKWebView(Frame, config);
+                SetNativeControl(_wkWebView);
+            }
 
-                    webView.Configuration.AllowsInlineMediaPlayback = true;
-                    webView.Configuration.MediaPlaybackRequiresUserAction = false;
-                    webView.Configuration.MediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypes.None;
+            if (e.OldElement != null)
+            {
+                Control.Configuration.UserContentController.RemoveScriptMessageHandler(CustomWebView.JavascriptInterfaceName);
+            }
 
-                    webView.Configuration.UserContentController.AddScriptMessageHandler(new WorkflowsWebViewScriptMessageHandler(), CustomWebView.JavascriptInterfaceName);
-
-                }
+            if (e.NewElement != null)
+            {
+                var urlSource = (UrlWebViewSource)e.NewElement.Source;
+                _wkWebView.LoadRequest(new NSUrlRequest(new NSUrl(urlSource.Url)));
             }
         }
     }
