@@ -129,6 +129,11 @@ namespace WorkflowsWebview.Droid.Renderers
         {
             var workflow = JsonConvert.DeserializeObject(content);
 
+            if (_renderer.Element is CustomWebView customWebView)
+            {
+                customWebView.InvokeScriptMessageReceived("workflow", content);
+            }
+
             System.Diagnostics.Debug.WriteLine($"onWorkflowCompletion: {workflow}");
         }
 
@@ -137,6 +142,11 @@ namespace WorkflowsWebview.Droid.Renderers
         public void OnStepCompletion(string content)
         {
             var step = JsonConvert.DeserializeObject(content);
+
+            if (_renderer.Element is CustomWebView customWebView)
+            {
+                customWebView.InvokeScriptMessageReceived("step", content);
+            }
 
             System.Diagnostics.Debug.WriteLine($"onStepCompletion: {step}");
         }
