@@ -8,7 +8,7 @@ namespace WorkflowsWebview
 {
     public partial class MainPage : ContentPage
     {
-        public const string Url = "WORKFLOW_URL";
+        public const string Url = "https://dev.workflows.rem.tools/ODI2MnwzZkc1dDdtQjk1NlNLQWJscXFoZmxGSlRQVGx4NW9Ea3N5Sm1wTkFa";
         
         public MainPage()
         {
@@ -30,18 +30,26 @@ namespace WorkflowsWebview
 
             webView.OnScriptMessageReceived += (entity, value) =>
             {
-                // parsedValue is the step or workflow object
-                var parsedValue = JsonConvert.DeserializeObject(value);
+                try
+                {
+                    // parsedValue is the step or workflow object
+                    var parsedValue = JsonConvert.DeserializeObject(value);
 
-                if (entity == "step")
-                {
-                    // In case of step event
-                    System.Diagnostics.Debug.WriteLine($"step: {parsedValue}");
+                    if (entity == "step")
+                    {
+                        // In case of step event
+                        System.Diagnostics.Debug.WriteLine($"step: {parsedValue}");
+                    }
+                    else if (entity == "workflow")
+                    {
+                        // In case of workflow event
+                        System.Diagnostics.Debug.WriteLine($"workflow: {parsedValue}");
+                    }
                 }
-                else if (entity == "workflow")
+                catch (JsonException error)
                 {
-                    // In case of workflow event
-                    System.Diagnostics.Debug.WriteLine($"workflow: {parsedValue}");
+                    // Handle or log exception
+                    System.Diagnostics.Debug.WriteLine($"Error occurred while deserializing value: {error.Message}");
                 }
             };
 

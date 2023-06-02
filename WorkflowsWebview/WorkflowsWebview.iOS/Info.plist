@@ -40,5 +40,9 @@
 	<string>test</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>test</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>test</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>test</string>
 </dict>
 </plist>
