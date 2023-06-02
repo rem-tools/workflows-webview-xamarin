@@ -5,7 +5,6 @@ using Xamarin.Forms;
 using System.Diagnostics;
 using Xamarin.Forms.Platform.iOS;
 using Foundation;
-using System;
 
 [assembly: ExportRenderer(typeof(CustomWebView), typeof(CustomWebViewRenderer))]
 namespace WorkflowsWebview.iOS.Renderers
@@ -83,27 +82,16 @@ namespace WorkflowsWebview.iOS.Renderers
                     string entity = entityObject.ToString();
                     string value = valueObject.ToString();
 
-                    dynamic parsedValue;
-                    try
-                    {
-                        parsedValue = Newtonsoft.Json.JsonConvert.DeserializeObject(value);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Error parsing JSON: {ex.Message}");
-                        return;
-                    }
-
                     if (entity == "step")
                     {
-                        customWebView.InvokeScriptMessageReceived(entity, parsedValue);
+                        customWebView.InvokeScriptMessageReceived(entity, value);
                         Debug.WriteLine($"Step: {entity} - {value}");
 
                         // Aqui se puede usar el contenido del Step
                     }
                     else if (entity == "workflow")
                     {
-                        customWebView.InvokeScriptMessageReceived(entity, parsedValue);
+                        customWebView.InvokeScriptMessageReceived(entity, value);
                         Debug.WriteLine($"Workflow: {entity} - {value}");
 
                         // Aqui se puede usar el contenido del Workflow
