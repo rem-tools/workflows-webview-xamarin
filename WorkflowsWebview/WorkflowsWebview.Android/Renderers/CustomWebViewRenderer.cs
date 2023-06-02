@@ -30,8 +30,7 @@ namespace WorkflowsWebview.Droid.Renderers
                 {
                     Manifest.Permission.Camera,
                     Manifest.Permission.RecordAudio,
-                    Manifest.Permission.AccessFineLocation,
-                    Manifest.Permission.AccessCoarseLocation
+                    Manifest.Permission.AccessFineLocation
                 };
 
             bool allPermissionsGranted = true;
