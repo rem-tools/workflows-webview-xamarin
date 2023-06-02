@@ -30,7 +30,8 @@ namespace WorkflowsWebview.Droid.Renderers
                 {
                     Manifest.Permission.Camera,
                     Manifest.Permission.RecordAudio,
-                    Manifest.Permission.AccessFineLocation
+                    Manifest.Permission.AccessFineLocation,
+                    Manifest.Permission.AccessCoarseLocation
                 };
 
             bool allPermissionsGranted = true;
@@ -158,6 +159,12 @@ namespace WorkflowsWebview.Droid.Renderers
         public override void OnPermissionRequest(PermissionRequest request)
         {
             request.Grant(request.GetResources());
+        }
+
+        public override void OnGeolocationPermissionsShowPrompt(string origin, GeolocationPermissions.ICallback callback)
+        {
+            base.OnGeolocationPermissionsShowPrompt(origin, callback);
+            callback.Invoke(origin, true, false);
         }
     }
 
